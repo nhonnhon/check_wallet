@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Helper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        fontFamily: {
+          sans: "Barlow Condensed, sans-serif",
+          body: "Barlow Condensed, sans-serif",
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.3.6/dist/web3.min.js"></script>
+</head>
+
+<body>
+  <div class="container mx-auto px-4 py-4">
+    <h1 class="text-3xl font-bold text-lime-400">Check balance for multiple wallets</h1>
+    <p>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+      standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+      type specimen book.
+    </p>
+
+    <form onsubmit="return generateWallet(event)" class="w-3/6">
+      <label for="wallets" class="block mb-2 mt-4 text-gray-900">Enter your wallets to check balance</label>
+      <textarea id="wallets" rows="10"
+        class="resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Enter total wallet"
+        required>0xc14b840eA8ff5Fa8E2a589e111A23823143A1715, 0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, 0x866716F370EbdA19156a3508F4dD167710D7B945, 0x1F3f901E0A58b12bf3A038e6E3A9930221C06F3D</textarea>
+      <p id="helper_text" class="text-xs">Number should be less than 100</p>
+      <button type="submit"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3 disabled:bg-gray-300"
+        id="submit_btn">
+        Check balance
+      </button>
+    </form>
+
+    <div class="relative mt-4 hidden" id="result_table">
+      <button
+        class="text-white bg-lime-500 hover:bg-lime-800 focus:outline-none focus:ring-lime-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3 mb-1"
+        onclick="downloadWallet()">
+        Download list
+      </button>
+      <p>
+        Checking list wallets
+      </p>
+      <table class="w-full text-sm text-left rtl:text-right dark:text-white">
+        <thead class="uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+          <tr>
+            <th class="px-6 py-3">No</th>
+            <th class="px-6 py-3">Address</th>
+            <th class="px-6 py-3">ETH</th>
+            <th class="px-6 py-3">BSC</th>
+            <th class="px-6 py-3">ARBI (ETH)</th>
+            <th class="px-6 py-3">MATIC</th>
+            <th class="px-6 py-3">CELO</th>
+          </tr>
+        </thead>
+        <tbody id="result_body"></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="constant.js"></script>
+  <script>
+    const NETWORK_LIST = Object.keys(END_POINT_BY_CHAIN);
+    console.log("🚀 ~ NETWORK_LIST:", NETWORK_LIST)
+    function generateWallet(e) {
+      e.preventDefault();
+
+      const valueString = document.getElementById("wallets").value;
+      const helperElement = document.getElementById("helper_text");
+      const tableElement = document.getElementById("result_table");
+
+      console.log("🚀 ~ generateWallet ~ valueString:", valueString)
+      if (valueString === '') {
+        helperElement.innerHTML = 'Wallet is empty, please input your wallets'
+        helperElement.classList.add('text-red-900')
+      }
+
+      if (valueString) {
+        const arrayWallets = valueString.split(', ')
+        console.log("🚀 ~ generateWallet ~ arrayWallets:", arrayWallets)
+
+      }
+
+    }
+
+
+  </script>
+</body>
+
+</html>
