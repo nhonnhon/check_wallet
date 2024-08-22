@@ -38,20 +38,21 @@
         class="resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Enter total wallet"
         required>0xc14b840eA8ff5Fa8E2a589e111A23823143A1715, 0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, 0x866716F370EbdA19156a3508F4dD167710D7B945, 0x1F3f901E0A58b12bf3A038e6E3A9930221C06F3D</textarea>
-      <p id="helper_text" class="text-xs">Number should be less than 100</p>
+      <p id="helper_text" class="mt-1 text-sm text-red-400">Format ex: 0xc14b840eA8ff5Fa8E2a589e111A23823143A1715,
+        0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, ... should have a comma and space between each wallet</p>
       <button type="submit"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3 disabled:bg-gray-300"
         id="submit_btn">
         Check balance
       </button>
+      <button type="button"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3 disabled:bg-gray-300"
+        id="rest_btn" onClick="window.location.reload()">
+        Reset
+      </button>
     </form>
 
     <div class="relative mt-4 hidden" id="result_table">
-      <button
-        class="text-white bg-lime-500 hover:bg-lime-800 focus:outline-none focus:ring-lime-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3 mb-1"
-        onclick="downloadWallet()">
-        Download list
-      </button>
       <p>
         Checking list wallets
       </p>
@@ -75,7 +76,6 @@
   <script src="utils.js"></script>
   <script>
     const NETWORK_LIST = Object.keys(END_POINT_BY_CHAIN);
-    console.log("🚀 ~ NETWORK_LIST:", NETWORK_LIST)
 
     function getBalanceList(arrayWallets) {
       let i = 0;
@@ -93,20 +93,19 @@
               )
             );
           }
+          document.getElementById("result_table").classList.remove("hidden");
+          document.getElementById("result_body").innerHTML +=
+            '<tr class="bg-white dark:bg-gray-800 border-b">' +
+            '<td class="px-6 py-4">' + (i + 1) + "</td>" +
+            '<td class="px-6 py-4">' + arrayWallets[i] + "</td>";
           let data = await Promise.all(axiosInstance);
           for (let k = 0; k < NETWORK_LIST.length; k++) {
             const balance = convertBalance(data[k].data?.result);
-            console.log(
-              `${NETWORK_LIST[k]} balance: ${data[k].data.result ? balance : "N/A"}`
-            );
-            // if (balance > 0.000001) {
-            //   const print =
-            //     `${ADDRESS_LIST[i]} - ${NETWORK_LIST[k]} balance: ${balance}` + "\n";
-            //   fs.appendFile("get_balance.txt", print, function (err) {
-            //     if (err) throw err;
-            //   });
-            // }
+            document.querySelector("#result_body tr:nth-child(" + (i + 1) + ")").innerHTML +=
+              '<td class="px-6 py-4">' + (data[k].data?.result ? balance : 'N/A') + "</td>";
+
           }
+          document.querySelector("#result_body tr:nth-child(" + (i + 1) + ")").innerHTML += '</tr>'
           setTimeout(() => {
             i++;
             if (i === walletsCount) {
@@ -129,7 +128,6 @@
       const helperElement = document.getElementById("helper_text");
       const tableElement = document.getElementById("result_table");
 
-      console.log("🚀 ~ generateWallet ~ valueString:", valueString)
       if (valueString === '') {
         helperElement.innerHTML = 'Wallet is empty, please input your wallets'
         helperElement.classList.add('text-red-900')
@@ -137,8 +135,8 @@
 
       if (valueString) {
         const arrayWallets = valueString.split(', ')
-        console.log("🚀 ~ generateWallet ~ arrayWallets:", arrayWallets)
-        getBalanceList(arrayWallets)
+
+        getBalanceList(getCorrectWalletList(arrayWallets))
 
       }
     }
