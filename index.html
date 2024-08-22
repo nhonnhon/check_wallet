@@ -4,17 +4,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crypto Helper</title>
+  <title>Crypto Helper: Multi-Wallet Balance Checker</title>
+  <meta name="description"
+    content="Crypto Helper is a free tool for checking the balances of multiple crypto wallets across various networks including Ethereum, Binance Smart Chain, Arbitrum, Polygon, and Celo. Enter up to 50 wallet addresses and get real-time balance updates effortlessly." />
+  <meta name="keywords"
+    content="crypto, cryptocurrency, wallet balance, Ethereum, Binance Smart Chain, Arbitrum, Polygon, Celo, blockchain" />
+  <meta name="author" content="Michael Scofield - I love this man" />
+  <link rel="icon" href="crypto-helper.ico" type="image/x-icon" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         fontFamily: {
-          sans: "Barlow Condensed, sans-serif",
-          body: "Barlow Condensed, sans-serif",
+          sans: "Poppins, sans-serif",
+          body: "Poppins, sans-serif",
         },
       },
     };
@@ -25,19 +33,30 @@
 
 <body>
   <div class="container mx-auto px-4 py-4">
-    <h1 class="text-3xl font-bold text-lime-400">Check balance for multiple wallets</h1>
+    <div class="flex justify-center my-4">
+      <img src="logo.png" alt="Crypto Helper Logo" class="w-32 h-auto" />
+    </div>
+    <h1 class="text-3xl font-bold text-lime-400 mb-4">Welcome to Crypto Helper!
+    </h1>
     <p>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-      standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-      type specimen book.
+      Our tool allows you to check the balances of multiple crypto wallets effortlessly in just one click. Simply input
+      your wallet addresses, and we'll fetch the latest balances across various networks like <i
+        class="text-yellow-400"><u>
+          Ethereum, Binance Smart Chain, Arbitrum, Polygon, and Celo
+        </u></i>. <br />
+      💰💰💰💰💰💰💰
+      <br /> Whether you're managing a large number of wallets or just need a
+      quick
+      overview of your holdings, Crypto Helper makes it simple and convenient. Enjoy accurate and real-time data without
+      the hassle!
     </p>
 
-    <form onsubmit="return generateWallet(event)" class="w-3/6">
+    <form onsubmit="return generateWallet(event)">
       <label for="wallets" class="block mb-2 mt-4 text-gray-900">Enter your wallets to check balance</label>
       <textarea id="wallets" rows="10"
         class="resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Enter total wallet"
-        required>0xc14b840eA8ff5Fa8E2a589e111A23823143A1715, 0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, 0x866716F370EbdA19156a3508F4dD167710D7B945, 0x1F3f901E0A58b12bf3A038e6E3A9930221C06F3D</textarea>
+        placeholder="Ex: 0xc14b840eA8ff5Fa8E2a589e111A23823143A1715, 0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, 0x866716F370EbdA19156a3508F4dD167710D7B945"
+        required></textarea>
       <p id="helper_text" class="mt-1 text-sm text-red-400">Format ex: 0xc14b840eA8ff5Fa8E2a589e111A23823143A1715,
         0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, ... should have a comma and space between each wallet</p>
       <button type="submit"
@@ -54,7 +73,7 @@
 
     <div class="relative mt-4 hidden" id="result_table">
       <p>
-        Checking list wallets
+        Result
       </p>
       <table class="w-full text-sm text-left rtl:text-right dark:text-white">
         <thead class="uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
@@ -70,6 +89,20 @@
         </thead>
         <tbody id="result_body"></tbody>
       </table>
+      <div id="loading" class=" flex justify-center my-4">
+        <div role="status">
+          <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
+            viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor" />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill" />
+          </svg>
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
     </div>
   </div>
   <script src="constant.js"></script>
@@ -106,6 +139,8 @@
           setTimeout(() => {
             i++;
             if (i === walletsCount) {
+              const loadingElement = document.getElementById('loading');
+              loadingElement.classList.add('hidden');
               return;
             } else {
               getBalance(i);
@@ -123,6 +158,7 @@
 
       const valueString = document.getElementById("wallets").value;
       const helperElement = document.getElementById("helper_text");
+      const submitButton = document.getElementById('submit_btn');
 
       // If no wallets were entered, display an error message
       if (!valueString) {
@@ -141,6 +177,8 @@
         helperElement.classList.add('text-red-900');
         return;
       }
+
+      submitButton.disabled = true;
 
       getBalanceList(correctWallets)
 
