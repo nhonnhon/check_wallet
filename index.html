@@ -94,18 +94,15 @@
             );
           }
           document.getElementById("result_table").classList.remove("hidden");
-          document.getElementById("result_body").innerHTML +=
-            '<tr class="bg-white dark:bg-gray-800 border-b">' +
-            '<td class="px-6 py-4">' + (i + 1) + "</td>" +
-            '<td class="px-6 py-4">' + arrayWallets[i] + "</td>";
           let data = await Promise.all(axiosInstance);
-          for (let k = 0; k < NETWORK_LIST.length; k++) {
-            const balance = convertBalance(data[k].data?.result);
-            document.querySelector("#result_body tr:nth-child(" + (i + 1) + ")").innerHTML +=
-              '<td class="px-6 py-4">' + (data[k].data?.result ? balance : 'N/A') + "</td>";
 
-          }
-          document.querySelector("#result_body tr:nth-child(" + (i + 1) + ")").innerHTML += '</tr>'
+          const row = `<tr class="bg-white dark:bg-gray-800 border-b">
+            <td class="px-6 py-4">${i + 1}</td>
+            <td class="px-6 py-4">${arrayWallets[i]}</td> 
+            ${data.map(d => `<td class="px-6 py-4">${d.data?.result ? convertBalance(d.data?.result) : 'N/A'}</td>`).join('')}
+            </tr>`;
+
+          document.getElementById("result_body").innerHTML += row
           setTimeout(() => {
             i++;
             if (i === walletsCount) {
@@ -126,22 +123,28 @@
 
       const valueString = document.getElementById("wallets").value;
       const helperElement = document.getElementById("helper_text");
-      const tableElement = document.getElementById("result_table");
 
-      if (valueString === '') {
+      // If no wallets were entered, display an error message
+      if (!valueString) {
         helperElement.innerHTML = 'Wallet is empty, please input your wallets'
-        helperElement.classList.add('text-red-900')
+        helperElement.classList.add('text-red-900');
+        return
       }
 
-      if (valueString) {
-        const arrayWallets = valueString.split(', ')
+      // Split the wallet string into an array, apply validation, and limit to 50 wallets
+      const arrayWallets = valueString.split(', ')
+      // Call the function to get valid wallets
+      const correctWallets = getCorrectWalletList(arrayWallets);
 
-        getBalanceList(getCorrectWalletList(arrayWallets))
-
+      if (correctWallets.length === 0) {
+        helperElement.innerHTML = 'No valid wallets found. Please check your input.';
+        helperElement.classList.add('text-red-900');
+        return;
       }
+
+      getBalanceList(correctWallets)
+
     }
-
-
   </script>
 </body>
 
