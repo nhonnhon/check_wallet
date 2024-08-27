@@ -54,32 +54,28 @@
 
 <body>
   <div class="container mx-auto px-4 py-4">
-    <div class="flex justify-center my-4">
-      <img src="logo.png" alt="Crypto Helper Logo" class="w-32 h-auto" />
+    <div class="flex justify-center">
+      <img src="logo.png" alt="Crypto Helper Logo" class="w-20 h-auto" />
     </div>
-    <h1 class="text-3xl font-bold text-lime-400 mb-4">Welcome to Crypto Helper!
+    <h1 class="text-xl font-bold text-lime-400 mb-4">Welcome to Crypto Helper!
     </h1>
-    <p>
-      Our tool allows you to check the balances of multiple crypto wallets effortlessly in just one click. Simply input
-      your wallet addresses, and we'll fetch the latest balances across various networks like <i
-        class="text-yellow-400"><u>
-          Ethereum, Binance Smart Chain, Arbitrum, Polygon, and Celo
-        </u></i>. <br />
-      💰💰💰💰💰💰💰
-      <br /> Whether you're managing a large number of wallets or just need a
-      quick
-      overview of your holdings, Crypto Helper makes it simple and convenient. Enjoy accurate and real-time data without
-      the hassle!
+    <p class="mt-4 text-sm">
+      Welcome to our free crypto wallet balance checker! Enter up to 50 wallet addresses and check their balances across
+      multiple networks, all with one click.
     </p>
-
+    <p class="mt-2 text-sm">
+      Supported networks include Ethereum, Binance Smart Chain, Polygon, and more. This tool is quick, easy, and
+      entirely free to use.
+    </p>
+    <hr class="mt-4 border border-bottom border-lime-400" />
     <form onsubmit="return generateWallet(event)">
       <label for="wallets" class="block mb-2 mt-4 text-gray-900">Enter your wallets to check balance</label>
-      <textarea id="wallets" rows="10"
+      <textarea id="wallets" rows="5"
         class="resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Ex: 0xc14b840eA8ff5Fa8E2a589e111A23823143A1715, 0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, 0x866716F370EbdA19156a3508F4dD167710D7B945"
+        placeholder="Ex: 0x4E656459ed25bF986Eea1196Bc1B00665401645d, 0x0000000000000000000000000000000000001000"
         required></textarea>
-      <p id="helper_text" class="mt-1 text-sm text-red-400">Format ex: 0xc14b840eA8ff5Fa8E2a589e111A23823143A1715,
-        0x4DE5f401A5839E8F8371338cDA8F3D374DFc0182, ... should have a comma and space between each wallet</p>
+      <p id="helper_text" class="mt-1 text-sm text-red-400">Format example: 0x4E656459ed25bF986Eea1196Bc1B00665401645d,
+        0x0000000000000000000000000000000000001000,... should have a comma and space between each wallet</p>
       <button type="submit"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3 disabled:bg-gray-300"
         id="submit_btn">
@@ -125,6 +121,23 @@
         </div>
       </div>
     </div>
+
+    <!-- Wallet Generator Section -->
+    <section class="mt-8 bg-gray-100 dark:bg-gray-800 py-6 rounded-lg shadow-md">
+      <div class="container mx-auto px-4">
+        <h2 class="text-xl font-bold text-lime-400 text-center">Need to Generate New Wallets?</h2>
+        <p class="text-sm text-center mt-4 max-w-2xl mx-auto text-gray-800 dark:text-gray-300 leading-relaxed">
+          Try our <strong>free wallet generator</strong> to create new wallets quickly and easily. Generate multiple
+          wallets at once and immediately check their balances here.
+        </p>
+        <div class="flex justify-center mt-6">
+          <a href="https://crypto-helpers.vercel.app/" target="_blank"
+            class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg shadow-md text-sm transition duration-300">
+            Generate New Wallets
+          </a>
+        </div>
+      </div>
+    </section>
   </div>
   <script src="constant.js"></script>
   <script src="utils.js"></script>
@@ -198,7 +211,7 @@
         helperElement.classList.add('text-red-900');
         return;
       }
-
+      helperElement.innerHTML = '';
       submitButton.disabled = true;
 
       getBalanceList(correctWallets)
